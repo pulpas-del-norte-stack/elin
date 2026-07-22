@@ -106,17 +106,28 @@ const playMaximize = () => {
 
 const DEFAULT_SERVICE = "instalaciones";
 
+const ensureDesktopDefaultService = () => {
+  if (!detail || !isDesktop()) return;
+  detail.hidden = false;
+  document.body.classList.remove("service-detail-open");
+  const firstCapsule = capsules?.querySelector(`[data-service="${DEFAULT_SERVICE}"]`);
+  openServiceDetail(DEFAULT_SERVICE, firstCapsule, { focusHeading: false, animate: false });
+};
+
 const syncDesktopDetailVisibility = () => {
   if (!detail) return;
   if (isDesktop()) {
-    detail.hidden = false;
-    document.body.classList.remove("service-detail-open");
-    if (!detail.classList.contains("is-open")) {
-      const firstCapsule = capsules?.querySelector(`[data-service="${DEFAULT_SERVICE}"]`);
-      openServiceDetail(DEFAULT_SERVICE, firstCapsule, { focusHeading: false, animate: false });
-    }
-  } else if (!detail.classList.contains("is-open")) {
+    ensureDesktopDefaultService();
+  } else {
+    // El HTML arranca abierto para escritorio; en móvil lo cerramos.
+    detail.classList.remove("is-open", "is-animating");
+    clearActiveCapsules();
+    panels?.forEach((panel) => {
+      panel.hidden = true;
+      panel.classList.remove("is-active");
+    });
     detail.hidden = true;
+    document.body.classList.remove("service-detail-open");
   }
 };
 
@@ -202,7 +213,6 @@ const openServiceDetail = (id, trigger, options = {}) => {
 detailPanel?.addEventListener("scroll", updateStickyBackVisibility, { passive: true });
 
 capsules?.querySelectorAll("[data-service]").forEach((button) => {
-  button.setAttribute("aria-expanded", "false");
   button.addEventListener("click", () => {
     openServiceDetail(button.dataset.service, button);
   });
@@ -219,12 +229,17 @@ document.addEventListener("keydown", (event) => {
 });
 
 desktopQuery.addEventListener("change", () => {
-  closeServiceDetail();
-  syncDesktopDetailVisibility();
+  if (isDesktop()) {
+    ensureDesktopDefaultService();
+  } else {
+    closeServiceDetail();
+    syncDesktopDetailVisibility();
+  }
   setStickyBackFaded(false);
 });
 
 syncDesktopDetailVisibility();
+requestAnimationFrame(ensureDesktopDefaultService);
 
 document.querySelector(".contact-form")?.addEventListener("submit", (event) => {
   event.preventDefault();

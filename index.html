@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260722c">
 </head>
 <body>
   <header class="site-header">
@@ -53,7 +53,7 @@
 
         <div class="service-explorer" data-service-explorer>
           <div class="service-capsules" data-service-capsules>
-            <button type="button" class="service-capsule" data-service="instalaciones" aria-controls="service-detail">
+            <button type="button" class="service-capsule is-active" data-service="instalaciones" aria-controls="service-detail" aria-expanded="true">
               <span class="service-capsule-index" aria-hidden="true">
                 <img src="assets/service-mark.png" alt="" width="18" height="18" decoding="async">
               </span>
@@ -85,7 +85,7 @@
             </button>
           </div>
 
-          <div class="service-detail" id="service-detail" data-service-detail hidden>
+          <div class="service-detail is-open" id="service-detail" data-service-detail>
             <div class="service-detail-backdrop" data-service-close tabindex="-1" aria-hidden="true"></div>
             <div class="service-detail-panel" role="region" aria-live="polite" aria-labelledby="service-instalaciones-title" tabindex="-1">
               <div class="service-detail-toolbar">
@@ -93,7 +93,7 @@
               </div>
               <p class="service-detail-placeholder">Selecciona una categoría para ver su desglose.</p>
               <div class="service-panels" data-service-panels>
-                <article class="service-panel" id="service-instalaciones" data-panel="instalaciones" hidden>
+                <article class="service-panel is-active" id="service-instalaciones" data-panel="instalaciones">
                   <h3 id="service-instalaciones-title">Instalaciones electro-industriales</h3>
                   <figure class="service-banner">
                     <img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=1400&h=560&q=80" alt="Técnico instalando y cableando un tablero eléctrico industrial" width="1400" height="560" loading="lazy">
@@ -335,6 +335,6 @@
     <img src="assets/whatsapp-icon.png" alt="" width="56" height="56" decoding="async">
   </a>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260722c"></script>
 </body>
 </html>
