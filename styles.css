@@ -923,16 +923,23 @@ body.service-detail-open {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #25d366;
+  background: transparent;
   color: #fff;
   display: grid;
   place-items: center;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
   transition: transform 0.25s ease;
+  overflow: hidden;
 }
 
 .whatsapp-float:hover { transform: translateY(-2px) scale(1.03); }
-.whatsapp-float svg { width: 28px; height: 28px; }
+
+.whatsapp-float img {
+  width: 56px;
+  height: 56px;
+  display: block;
+  object-fit: contain;
+}
 
 @keyframes heroZoom {
   from { transform: scale(1.08); }
