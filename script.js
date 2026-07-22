@@ -46,7 +46,7 @@ const updateStickyBackVisibility = () => {
     return;
   }
 
-  const bottomBack = detail.querySelector(".service-panel.is-active .service-back");
+  const bottomBack = detail.querySelector(".service-panel.is-active .service-panel-actions");
   if (!bottomBack) {
     setStickyBackFaded(false);
     return;
