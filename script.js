@@ -104,17 +104,17 @@ const playMaximize = () => {
   }, 420);
 };
 
+const DEFAULT_SERVICE = "instalaciones";
+
 const syncDesktopDetailVisibility = () => {
   if (!detail) return;
   if (isDesktop()) {
     detail.hidden = false;
-    if (!detail.classList.contains("is-open")) {
-      panels?.forEach((panel) => {
-        panel.hidden = true;
-        panel.classList.remove("is-active");
-      });
-    }
     document.body.classList.remove("service-detail-open");
+    if (!detail.classList.contains("is-open")) {
+      const firstCapsule = capsules?.querySelector(`[data-service="${DEFAULT_SERVICE}"]`);
+      openServiceDetail(DEFAULT_SERVICE, firstCapsule, { focusHeading: false, animate: false });
+    }
   } else if (!detail.classList.contains("is-open")) {
     detail.hidden = true;
   }
@@ -123,22 +123,18 @@ const syncDesktopDetailVisibility = () => {
 const closeServiceDetail = () => {
   if (!detail || !detail.classList.contains("is-open")) return;
 
-  detail.classList.remove("is-open", "is-animating");
-  clearActiveCapsules();
-  document.body.classList.remove("service-detail-open");
-
   window.clearTimeout(closingTimer);
 
   if (isDesktop()) {
-    panels?.forEach((panel) => {
-      panel.hidden = true;
-      panel.classList.remove("is-active");
-    });
-    resetDetailScroll();
-    lastTrigger?.focus({ preventScroll: true });
-    lastTrigger = null;
+    // En escritorio siempre queda una categoría visible (la primera).
+    const firstCapsule = capsules?.querySelector(`[data-service="${DEFAULT_SERVICE}"]`);
+    openServiceDetail(DEFAULT_SERVICE, firstCapsule, { focusHeading: false });
     return;
   }
+
+  detail.classList.remove("is-open", "is-animating");
+  clearActiveCapsules();
+  document.body.classList.remove("service-detail-open");
 
   closingTimer = window.setTimeout(() => {
     detail.hidden = true;
@@ -153,8 +149,10 @@ const closeServiceDetail = () => {
   }, 320);
 };
 
-const openServiceDetail = (id, trigger) => {
+const openServiceDetail = (id, trigger, options = {}) => {
   if (!detail || !panels) return;
+
+  const { focusHeading = true, animate = true } = options;
 
   window.clearTimeout(closingTimer);
   lastTrigger = trigger || null;
@@ -168,12 +166,14 @@ const openServiceDetail = (id, trigger) => {
   if (isDesktop()) {
     void detail.offsetWidth;
     detail.classList.add("is-open");
-    playMaximize();
+    if (animate) playMaximize();
     resetDetailScroll();
-    const activePanel = detail.querySelector(".service-panel.is-active");
-    const heading = activePanel?.querySelector("h3");
-    heading?.setAttribute("tabindex", "-1");
-    heading?.focus({ preventScroll: true });
+    if (focusHeading) {
+      const activePanel = detail.querySelector(".service-panel.is-active");
+      const heading = activePanel?.querySelector("h3");
+      heading?.setAttribute("tabindex", "-1");
+      heading?.focus({ preventScroll: true });
+    }
     requestAnimationFrame(resetDetailScroll);
     return;
   }
@@ -184,16 +184,18 @@ const openServiceDetail = (id, trigger) => {
       detail.classList.add("is-open");
       document.body.classList.add("service-detail-open");
       resetDetailScroll();
-      const activePanel = detail.querySelector(".service-panel.is-active");
-      const heading = activePanel?.querySelector("h3");
-      heading?.setAttribute("tabindex", "-1");
-      heading?.focus({ preventScroll: true });
+      if (focusHeading) {
+        const activePanel = detail.querySelector(".service-panel.is-active");
+        const heading = activePanel?.querySelector("h3");
+        heading?.setAttribute("tabindex", "-1");
+        heading?.focus({ preventScroll: true });
+      }
       requestAnimationFrame(resetDetailScroll);
     });
     return;
   }
 
-  playMaximize();
+  if (animate) playMaximize();
   resetDetailScroll();
 };
 
