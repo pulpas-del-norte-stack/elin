@@ -836,6 +836,10 @@ body.service-detail-open {
   background: var(--paper);
 }
 
+.about-content .eyebrow {
+  color: var(--red);
+}
+
 .about-content p {
   color: var(--muted);
   margin-top: 1rem;
